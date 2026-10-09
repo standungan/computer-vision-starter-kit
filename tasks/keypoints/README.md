@@ -40,7 +40,7 @@ error against the blob and **collapsed to predicting zeros** — [tests/test_tas
 ## Run it
 
 ```bash
-python -m cvkit keypoints quickstart --quick           # ~3 min on a 4-core CPU
+python -m cvkit keypoints quickstart --quick           # ~2 min on a 4-core CPU
 ```
 
 Expect a mean error of about **1 px** on 128 px images and **PCK@0.05 near 1.0** on the demo triangles. Outputs in

@@ -24,7 +24,7 @@ By [Sofyan Tandungan](https://instagram.com/sofyantandungan) · NeuronEngine · 
 | [**detection**](tasks/detection) | Where are the objects, and what are they? | image → boxes + classes | ~5 min | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/standungan/computer-vision-starter-kit/blob/main/tasks/detection/notebooks/00_quickstart.ipynb) |
 | [**instance_segmentation**](tasks/instance_segmentation) | What is the exact outline of each object? | image → mask per object | ~10 min | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/standungan/computer-vision-starter-kit/blob/main/tasks/instance_segmentation/notebooks/00_quickstart.ipynb) |
 | [**segmentation**](tasks/segmentation) | What class is every pixel? | image → class map | ~5 min | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/standungan/computer-vision-starter-kit/blob/main/tasks/segmentation/notebooks/00_quickstart.ipynb) |
-| [**keypoints**](tasks/keypoints) | Where are the landmarks? | image → named (x, y) points | ~3 min | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/standungan/computer-vision-starter-kit/blob/main/tasks/keypoints/notebooks/00_quickstart.ipynb) |
+| [**keypoints**](tasks/keypoints) | Where are the landmarks? | image → named (x, y) points | ~2 min | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/standungan/computer-vision-starter-kit/blob/main/tasks/keypoints/notebooks/00_quickstart.ipynb) |
 
 Not sure which? Every task README opens with *when to use it* and *what to use instead*. Unfamiliar words: [glossary](docs/glossary.md).
 Times were measured on a 4-core CPU; a GPU is much faster.
@@ -115,7 +115,7 @@ so a checkpoint file can't run code and editing the YAML later can't break infer
 
 ## Requirements
 
-Python 3.10+, `torch ≥ 2.8`, `torchvision ≥ 0.23`. No GPU needed. On Colab only `pip install pyyaml scikit-learn gradio` is missing
+Python 3.10+, `torch ≥ 2.8`, `torchvision ≥ 0.23` (developed and tested on Python 3.13, torch 2.14, torchvision 0.29). No GPU needed. On Colab only `pip install pyyaml scikit-learn gradio` is missing
 (every notebook's first cell does it).
 
 ```bash

@@ -2,7 +2,7 @@
 
 ## 1. Install
 
-You need Python 3.10+. A GPU is optional: every task has a `quick` preset that runs on a laptop CPU.
+You need Python 3.10+ (developed and tested on 3.13 with torch 2.14 / torchvision 0.29). A GPU is optional: every task has a `quick` preset that runs on a laptop CPU.
 
 ```bash
 git clone https://github.com/standungan/computer-vision-starter-kit
@@ -33,8 +33,8 @@ Everything lands in `outputs/classification_quick/`: `checkpoints/best.pt`, `his
 | `classification` | which of N classes is this? | 1 min |
 | `multilabel` | which of N tags apply? | 1 min |
 | `regression` | what number does this image show? | 1 min |
-| `keypoints` | where are the landmarks? | 3 min |
-| `segmentation` | what class is each pixel? | 3 min |
+| `keypoints` | where are the landmarks? | 2 min |
+| `segmentation` | what class is each pixel? | 5 min |
 | `detection` | where are the objects, and what are they? | 5 min |
 | `instance_segmentation` | the exact outline of each object | 10 min |
 

@@ -36,7 +36,10 @@ while not Path("cvkit").exists() and Path.cwd() != Path.cwd().parent:
 sys.path.insert(0, os.getcwd())
 print("working in", Path.cwd().name)'''
 
-SETUP = '''from PIL import Image
+SETUP = '''%config InlineBackend.figure_format = "jpeg"
+%config InlineBackend.print_figure_kwargs = {"bbox_inches": "tight", "pil_kwargs": {"quality": 90}}   # keeps saved notebooks small
+
+from PIL import Image
 
 from cvkit.config import load_config
 from cvkit.synthetic import make_demo_data
@@ -52,12 +55,12 @@ if not Path(cfg["data"]["root"]).exists():          # first run: create the demo
     make_demo_data("<<TASK>>", cfg)
 print("task:", "<<TASK>>", "| data:", cfg["data"]["root"], "| outputs:", cfg["output"]["dir"])'''
 
-SHOW_REPORTS = '''from IPython.display import Image as IPImage, display
+SHOW_REPORTS = '''from cvkit.viz import show_image
 
 reports = Path(cfg["output"]["dir"]) / "reports"
 for name in <<NAMES>>:
     print(name)
-    display(IPImage(filename=str(reports / name)))'''
+    show_image(reports / name)'''
 
 ENSURE_TRAINED = '''from cvkit.checkpoint import checkpoint_path
 from tasks.<<TASK>>.train import train
@@ -129,8 +132,7 @@ def build(task: str, spec: dict) -> dict[str, list]:
         ("code", t("from tasks.<<TASK>>.train import train\n\nresult = train(cfg)\n"
                    "print('\\nbest epoch:', result['best_epoch'], '|', {k: round(v, 4) for k, v in result['best_metrics'].items()})")),
         ("md", "## Learning curves\n" + spec["curves_md"]),
-        ("code", "from cvkit.viz import plot_history\nfrom IPython.display import display\n\n"
-                 "fig = plot_history(Path(cfg['output']['dir']) / 'history.csv')\ndisplay(fig)"),
+        ("code", "from cvkit.viz import plot_history\n\n_ = plot_history(Path(cfg['output']['dir']) / 'history.csv')"),
         ("md", "## Evaluate on the test split\nVal chose the checkpoint; the **test split** was untouched until now, so it is the honest number. "
                "One rule: look at test results, *don't tune on them* — the moment you tweak settings to chase the test score, it stops measuring generalisation."),
         ("code", t("from tasks.<<TASK>>.evaluate import evaluate\n\nmetrics = evaluate(cfg)")),

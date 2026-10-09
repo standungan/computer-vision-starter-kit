@@ -685,7 +685,7 @@ SEGMENTATION = dict(
     title="Semantic segmentation",
     blurb="**Semantic segmentation** classifies every *pixel*: road, sky, tumour, defect, background. The output is an image the same size as the input, "
           "where each pixel holds a class id. It doesn't separate individual objects — two touching circles are one 'circle' region.",
-    minutes=3,
+    minutes=5,
     peek='''import numpy as np
 from PIL import Image
 from cvkit.viz import image_grid, overlay_label_map
@@ -817,7 +817,7 @@ KEYPOINTS = dict(
     title="Keypoint estimation",
     blurb="**Keypoint estimation** finds named landmarks — body joints, facial points, the corners of a part — and returns an (x, y) position for each. "
           "The demo locates the three corners of a triangle (`apex`, `left`, `right`). This task expects **one labelled object per image**.",
-    minutes=3,
+    minutes=2,
     peek='''from PIL import Image
 from cvkit.viz import draw_keypoints, image_grid
 from tasks.keypoints.data import build_datasets

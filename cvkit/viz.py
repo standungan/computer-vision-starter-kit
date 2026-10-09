@@ -9,6 +9,7 @@ class index, so a class keeps its colour across images.
 from __future__ import annotations
 
 import csv
+import io
 from pathlib import Path
 
 import matplotlib
@@ -49,6 +50,21 @@ def save_fig(fig, path: str | Path | None, dpi: int = 150) -> None:
         plt.close(fig)
 
 
+def show_image(path: str | Path, max_width: int = 900, quality: int = 90) -> None:
+    """Display an image file inline in a notebook, as a compact JPEG.
+
+    The report plots are saved as sharp 150-dpi PNGs; embedding those as-is would make a saved
+    notebook many megabytes. This shows the same picture at screen size instead.
+    """
+    from IPython.display import Image as IPImage, display
+    im = Image.open(path).convert("RGB")
+    if im.width > max_width:
+        im = im.resize((max_width, round(im.height * max_width / im.width)), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=quality)
+    display(IPImage(data=buf.getvalue(), format="jpeg"))
+
+
 # ---------------------------------------------------------------- learning curves
 def read_history(path: str | Path) -> list[dict]:
     with open(path, encoding="utf-8") as f:
@@ -77,12 +93,16 @@ def plot_history(history: list[dict] | str | Path, out: str | Path | None = None
     fig, axes = plt.subplots(1, len(panels), figsize=(4.6 * len(panels), 3.6), squeeze=False)
     epochs = [int(h["epoch"]) for h in history]
     for ax, (name, cols) in zip(axes[0], panels):
+        series = {c: [h[c] for h in history] for c in cols}
+        lo, hi = min(min(v) for v in series.values()), max(max(v) for v in series.values())
+        ends = [v[-1] for v in series.values()]
+        crowded = len(ends) == 2 and abs(ends[0] - ends[1]) < 0.06 * (hi - lo or 1)   # labels would collide
         for col, color in zip(cols, (BLUE, ORANGE) if len(cols) == 2 else
                               ((BLUE,) if col_is_train(cols[0]) else (ORANGE,))):
-            vals = [h[col] for h in history]
-            ax.plot(epochs, vals, color=color, label=col.split("_")[0])
-            ax.annotate(col.split("_")[0], (epochs[-1], vals[-1]), xytext=(4, 0),
-                        textcoords="offset points", color=INK_2, fontsize=9, va="center")
+            ax.plot(epochs, series[col], color=color, label=col.split("_")[0])
+            if not crowded:                                      # otherwise the legend carries identity
+                ax.annotate(col.split("_")[0], (epochs[-1], series[col][-1]), xytext=(4, 0),
+                            textcoords="offset points", color=INK_2, fontsize=9, va="center")
         ax.set_title(name)
         ax.set_xlabel("epoch")
         if len(epochs) <= 12:
