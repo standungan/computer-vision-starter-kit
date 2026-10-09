@@ -1,0 +1,39 @@
+# Keypoints — default run. Edit data.root to use your own COCO-keypoints dataset.
+project_name: keypoint-locator
+seed: 42
+device: auto
+
+data:
+  # COCO layout: root/images/*.jpg + root/annotations.json with "keypoints": [x, y, v, ...] per object.
+  # This task expects ONE labelled object per image (see README for multi-person).
+  root: data/demo/keypoints
+  images_dir: images
+  annotations: annotations.json
+  image_size: 256
+  batch_size: 16
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  # No flips: a flipped face swaps "left eye" and "right eye", so the labels would have to be swapped too.
+  augment: {rotation: 15, translate: 0.08, scale: [0.9, 1.1], color_jitter: 0.1}
+
+model:
+  arch: resnet18          # resnet18 | resnet34 | resnet50 (encoder; the deconv head is added on top)
+  pretrained: true
+  heatmap_sigma: 2.0      # blur radius of the training target, in heatmap pixels
+
+train:
+  epochs: 30
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  amp: true
+  early_stopping_patience: 8
+
+eval:
+  pck_threshold: 0.05     # a keypoint is "correct" if it lands within 5% of the image side of the truth
+
+output:
+  dir: outputs/keypoints
+
+demo:
+  n: 400
+  size: 128

@@ -1,0 +1,40 @@
+# Instance segmentation — default run. Edit data.root to use your own COCO-format dataset.
+project_name: instance-segmenter
+seed: 42
+device: auto
+
+data:
+  # COCO layout with polygon masks: root/images/*.jpg + root/annotations.json
+  # every annotation needs "segmentation": [[x1, y1, x2, y2, ...]]   (see docs/data-formats.md)
+  root: data/demo/instance_segmentation
+  images_dir: images
+  annotations: annotations.json
+  image_size: 512
+  batch_size: 4
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  augment: {hflip: true, vflip: false, color_jitter: 0.1}   # masks and boxes follow the flips
+
+model:
+  arch: maskrcnn_resnet18_fpn      # maskrcnn_resnet18_fpn | maskrcnn_resnet50_fpn
+  pretrained: true                 # ImageNet-pretrained backbone
+  pretrained_detector: false       # true = start from COCO-trained Mask R-CNN (resnet50 only)
+
+train:
+  epochs: 20
+  lr: 5.0e-4
+  weight_decay: 1.0e-4
+  grad_clip: 10.0
+  amp: true
+  early_stopping_patience: 6
+
+eval:
+  score_threshold: 0.5
+  mask_threshold: 0.5    # a pixel belongs to an object when its mask probability >= this
+
+output:
+  dir: outputs/instance_segmentation
+
+demo:
+  n: 400
+  size: 128

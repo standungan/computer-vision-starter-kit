@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.pytest_cache/
+.venv/
 data/
 outputs/
 .gradio/

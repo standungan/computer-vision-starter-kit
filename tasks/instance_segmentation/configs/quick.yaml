@@ -1,0 +1,24 @@
+# Instance segmentation — quick run on synthetic shapes (CPU, several minutes).
+base: default.yaml
+project_name: shapes-instance-segmenter
+
+data:
+  image_size: 128
+  batch_size: 8
+  num_workers: 0
+
+model:
+  pretrained: false
+  roi_samples_per_image: 32
+
+train:
+  epochs: 15
+  lr: 1.0e-3
+  early_stopping_patience: 0
+
+output:
+  dir: outputs/instance_segmentation_quick
+
+demo:
+  n: 240
+  size: 128

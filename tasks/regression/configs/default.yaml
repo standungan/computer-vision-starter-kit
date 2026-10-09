@@ -1,0 +1,38 @@
+# Regression — default run. Edit data.root to use your own data.
+project_name: image-regressor
+seed: 42
+device: auto
+
+data:
+  # root/images/*.jpg + root/labels.csv  (columns: filename,value)
+  root: data/demo/regression
+  images_dir: images
+  labels_file: labels.csv
+  image_size: 224
+  batch_size: 32
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  # Augmentation must NOT change the number you are predicting. Flips and small rotations
+  # keep an object's size; zooming or cropping would not, so there is no zoom here.
+  augment: {hflip: true, vflip: true, rotation: 10, color_jitter: 0.1, random_erasing: 0.0}
+
+model:
+  arch: resnet18
+  pretrained: true
+  freeze_backbone: false
+  dropout: 0.0
+
+train:
+  epochs: 25
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  loss: huber           # huber | mse | l1  (huber = robust to a few wrong labels)
+  amp: true
+  early_stopping_patience: 8
+
+output:
+  dir: outputs/regression
+
+demo:
+  n: 600
+  size: 96

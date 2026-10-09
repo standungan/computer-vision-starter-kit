@@ -1,0 +1,23 @@
+# Keypoints — quick run on synthetic triangles (CPU, a few minutes).
+base: default.yaml
+project_name: triangle-keypoints
+
+data:
+  image_size: 128
+  batch_size: 16
+  num_workers: 0
+
+model:
+  pretrained: false
+
+train:
+  epochs: 20
+  lr: 2.0e-3
+  early_stopping_patience: 0
+
+output:
+  dir: outputs/keypoints_quick
+
+demo:
+  n: 320
+  size: 128

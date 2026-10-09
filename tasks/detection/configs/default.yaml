@@ -1,0 +1,41 @@
+# Object detection — default run. Edit data.root to use your own COCO-format dataset.
+project_name: object-detector
+seed: 42
+device: auto
+
+data:
+  # COCO layout: root/images/*.jpg + root/annotations.json   (see docs/data-formats.md)
+  root: data/demo/detection
+  images_dir: images
+  annotations: annotations.json
+  image_size: 512        # the model resizes the shorter side to this (smaller = faster)
+  batch_size: 4
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  augment: {hflip: true, vflip: false, color_jitter: 0.1}   # boxes follow the flips automatically
+
+model:
+  # fasterrcnn_resnet18_fpn | fasterrcnn_mobilenet_v3_large_320_fpn |
+  # fasterrcnn_mobilenet_v3_large_fpn | fasterrcnn_resnet50_fpn
+  arch: fasterrcnn_resnet18_fpn
+  pretrained: true            # ImageNet-pretrained backbone (needs internet the first time)
+  pretrained_detector: false  # true = start from a COCO-trained detector (resnet50 / mobilenet archs only)
+  # roi_samples_per_image: 64 # ROIs the 2nd stage trains on per image; lower = faster (default 64)
+
+train:
+  epochs: 20
+  lr: 5.0e-4
+  weight_decay: 1.0e-4
+  grad_clip: 10.0
+  amp: true
+  early_stopping_patience: 6
+
+eval:
+  score_threshold: 0.5   # detections below this score are hidden in plots / counted as "not detected"
+
+output:
+  dir: outputs/detection
+
+demo:
+  n: 400
+  size: 128

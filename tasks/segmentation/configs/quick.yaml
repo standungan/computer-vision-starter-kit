@@ -1,0 +1,24 @@
+# Semantic segmentation — quick run on synthetic shapes (CPU, a few minutes).
+base: default.yaml
+project_name: shapes-segmenter
+
+data:
+  image_size: 128
+  batch_size: 16
+  num_workers: 0
+  augment: {hflip: true, vflip: true, rotation: 0, color_jitter: 0.0}
+
+model:
+  pretrained: false
+
+train:
+  epochs: 40
+  lr: 2.0e-3
+  early_stopping_patience: 0
+
+output:
+  dir: outputs/segmentation_quick
+
+demo:
+  n: 300
+  size: 128

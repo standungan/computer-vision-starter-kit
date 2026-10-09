@@ -1,0 +1,29 @@
+# Classification — quick run: synthetic shapes, small images, CPU-friendly (~1 minute on a laptop CPU).
+base: default.yaml
+project_name: shapes-classifier
+
+data:
+  root: data/demo/classification
+  image_size: 96
+  batch_size: 16
+  num_workers: 0
+  augment:
+    vflip: true
+    rotation: 15
+    color_jitter: 0.0
+
+model:
+  pretrained: false      # no download needed; the demo is easy enough to learn from scratch
+  freeze_backbone: false
+
+train:
+  epochs: 15
+  lr: 2.0e-3
+  early_stopping_patience: 0
+
+output:
+  dir: outputs/classification_quick
+
+demo:
+  n: 450
+  size: 96

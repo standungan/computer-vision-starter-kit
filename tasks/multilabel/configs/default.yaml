@@ -1,0 +1,39 @@
+# Multi-label classification — default run. Edit data.root to use your own data.
+project_name: multilabel-tagger
+seed: 42
+device: auto
+
+data:
+  # root/images/*.jpg + root/labels.csv  (columns: filename, <label 1>, <label 2>, ... with 0/1)
+  root: data/demo/multilabel
+  images_dir: images
+  labels_file: labels.csv
+  image_size: 224
+  batch_size: 32
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}   # random, fixed by `seed`
+  augment: {hflip: true, vflip: false, rotation: 10, color_jitter: 0.1, random_erasing: 0.0}
+
+model:
+  arch: resnet18
+  pretrained: true
+  freeze_backbone: false
+  dropout: 0.2
+
+train:
+  epochs: 20
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  pos_weight: false     # true = up-weight rare labels in the loss (helps imbalanced tags)
+  amp: true
+  early_stopping_patience: 5
+
+eval:
+  threshold: 0.5        # a label is "present" when its probability >= this
+
+output:
+  dir: outputs/multilabel
+
+demo:
+  n: 600
+  size: 96

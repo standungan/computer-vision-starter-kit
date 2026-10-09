@@ -1,0 +1,36 @@
+# Semantic segmentation — default run. Edit data.root to use your own image + mask data.
+project_name: semantic-segmenter
+seed: 42
+device: auto
+
+data:
+  # root/images/*.jpg   root/masks/*.png (same file stem; pixel value = class id)   root/classes.txt
+  root: data/demo/segmentation
+  images_dir: images
+  masks_dir: masks
+  classes_file: classes.txt   # one class name per line; line 1 = class id 0 (usually "background")
+  ignore_index: 255           # mask pixels with this value are skipped by the loss and metrics
+  image_size: 256
+  batch_size: 8
+  num_workers: 2
+  split: {train: 0.70, val: 0.15, test: 0.15}
+  augment: {hflip: true, vflip: false, rotation: 10, color_jitter: 0.1}   # masks follow the geometry
+
+model:
+  arch: unet_resnet18       # unet_resnet18 | lraspp_mobilenet_v3_large | deeplabv3_mobilenet_v3_large
+  pretrained: true          # ImageNet-pretrained encoder/backbone
+
+train:
+  epochs: 25
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  dice_weight: 0.5          # loss = cross-entropy + dice_weight * dice loss (helps small objects); 0 = CE only
+  amp: true
+  early_stopping_patience: 8
+
+output:
+  dir: outputs/segmentation
+
+demo:
+  n: 400
+  size: 128

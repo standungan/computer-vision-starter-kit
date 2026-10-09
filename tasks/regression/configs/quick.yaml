@@ -1,0 +1,24 @@
+# Regression — quick run on synthetic circles: predict the radius in pixels (CPU, about a minute).
+base: default.yaml
+project_name: circle-radius-regressor
+
+data:
+  image_size: 96
+  batch_size: 16
+  num_workers: 0
+  augment: {hflip: true, vflip: true, rotation: 0, color_jitter: 0.0}
+
+model:
+  pretrained: false
+
+train:
+  epochs: 20
+  lr: 2.0e-3
+  early_stopping_patience: 0
+
+output:
+  dir: outputs/regression_quick
+
+demo:
+  n: 450
+  size: 96

@@ -1,0 +1,43 @@
+# Classification — default run. Edit data.root to point at your own dataset.
+project_name: steel-defect-classifier   # shown in the app header
+seed: 42
+device: auto                            # auto | cpu | cuda | mps
+
+data:
+  # ImageFolder layout: root/<class_name>/*.jpg   (see README.md)
+  # Example: NEU steel-surface defects -> https://www.kaggle.com/datasets/kaustubhdikshit/neu-surface-defect-database
+  root: data/NEU-CLS
+  image_size: 224
+  batch_size: 32
+  num_workers: 2
+  split:                 # stratified per class, fixed by `seed`
+    train: 0.70
+    val: 0.15
+    test: 0.15
+  augment:               # train split only; val/test stay deterministic
+    hflip: true
+    vflip: true          # steel textures have no canonical "up"; turn off for e.g. street scenes
+    rotation: 15
+    color_jitter: 0.10
+    random_erasing: 0.0  # probability; 0 disables
+
+model:
+  arch: resnet18         # resnet18 | resnet34 | resnet50 | mobilenet_v3_small | mobilenet_v3_large | efficientnet_b0
+  pretrained: true       # start from ImageNet weights (needs internet the first time)
+  freeze_backbone: false # true = feature extraction: only the new head trains
+  dropout: 0.2
+
+train:
+  epochs: 20
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  label_smoothing: 0.05
+  amp: true                     # mixed precision on CUDA; ignored on CPU
+  early_stopping_patience: 5    # 0 disables
+
+output:
+  dir: outputs/classification
+
+demo:                    # only used by `demo-data`
+  n: 600
+  size: 96
