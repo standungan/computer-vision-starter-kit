@@ -36,7 +36,7 @@ Images with no objects are fine. Converting from YOLO / Pascal VOC, and every fo
 python -m cvkit detection quickstart --quick           # ~5 min on a 4-core CPU
 ```
 
-On the shapes demo (trained from scratch in minutes) expect **mAP@.5 near 1.0** and **mAP@[.5:.95] around 0.8**.
+On the shapes demo (trained from scratch in minutes) expect **mAP@.5 near 1.0** and **mAP@[.5:.95] around 0.9**.
 Outputs in `outputs/detection_quick/`: `reports/{ap_per_class,predictions,worst_images}.png`, `metrics.json`, and annotated copies of predicted images in `predictions/`.
 
 ## How to read the results
